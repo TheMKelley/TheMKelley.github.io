@@ -87,3 +87,16 @@ h1 {
   margin-bottom: 0%;
   animation: colorChange 5s linear infinite;
 }
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 50px;
+  }
+  p {
+    max-width: 90%;
+    font-size: 14px;
+  }
+  li {
+    margin-top: 2%;
+  }
+}
