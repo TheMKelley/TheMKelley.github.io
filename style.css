@@ -4,13 +4,18 @@ html {
 }
 
 p {
+  text-align: center;
   font-family: monospace;
-  font-size: 15px;
-  margin-top: 3%;
+  font-size: 17px;
+  line-height: 150%;
+  max-width: 50%;
+  margin: 0 auto;
+  padding-top: 10px;
 }
 
 h1 {
   text-align: center;
+  font-size: 75px;
   font-family: monospace;
   margin-bottom: 0%;
 
@@ -18,35 +23,36 @@ h1 {
 
 h2 {
   text-align: center;
+  font-size: 32px;
   font-family: monospace;
-  margin-top: 0%;
-  margin-bottom: 0%;
+  padding-bottom: 0%;
 }
 
 h3 {
   text-align: center;
+  font-size: 22px;
   font-family: monospace;
-  margin-top: 0%;
-  margin-bottom: 0%;
+  padding-bottom: 35px;
 }
 
-button {
-  background-color: #567
+h4{
+  text-align: center;
+  font-size: 22px;
+  font-family: monospace;
+  padding-top: 20px;
 }
 
-ul {
-  font-size: 15px;
-  font-family: monospace;
-  list-style-type: lower-roman;
-}
-  a {
-    background-color: black;
+
+a {
     color: white;
-    animation: fade 10s linear infinite;
+    font-weight: bolder;
 }
 
 li {
-  margin-top: 2%;
+  text-align: center;
+  margin-top: 4%;
+  font-weight: bolder;
+  display: inline-block;
 }
 
 button {
@@ -61,22 +67,23 @@ button {
   margin-bottom: 10px;
 }
 body {
-  background-color: blue;
+  background-color: cornflowerblue;
   color: white;
   animation: fade 10s linear infinite;
 }
 
-@keyframes fade {
-  0% {
-    background-color: blue;
-    color: white;
-  }
-  50% {
-    background-color: purple;
-    color: black;
-  }
-  100% {
-    background-color: green;
-    color: white;
-  }
+@keyframes colorChange {
+  0% { color: lightcoral; }
+  25% { color: lightsteelblue; }
+  50% { color: lightpink; }
+  75% { color: lightgreen; }
+  100% { color: lightcoral; }
+}
+
+h1 {
+  text-align: center;
+  font-size: 75px;
+  font-family: monospace;
+  margin-bottom: 0%;
+  animation: colorChange 5s linear infinite;
 }
