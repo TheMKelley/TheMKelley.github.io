@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Duel Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        #game-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        input[type="number"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        #message {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Welcome to the Digit Duel</h1>
+    <p>You have 3 attempts to guess a number between 1 and 15.</p>
+    <div id="game-status">
+        <p id="attempts-left">Attempts left: 3</p>
+        <input type="number" id="user-input" min="1" max="15" placeholder="Enter a number">
+        <button onclick="makeGuess()">Guess</button>
+    </div>
+    <div id="message"></div>
+    <button id="play-again" style="display: none;" onclick="startGame()">Play Again</button>
+</div>
+
+<script>
+    let dealersNum;
+    let attemptCounter;
+
+    function startGame() {
+        dealersNum = Math.floor(Math.random() * 15) + 1; // Random number between 1 and 15
+        attemptCounter = 3;
+        document.getElementById('attempts-left').textContent = "Attempts left: 3";
+        document.getElementById('message').textContent = "";
+        document.getElementById('play-again').style.display = "none";
+        document.getElementById('user-input').value = "";
+        document.getElementById('user-input').disabled = false;
+    }
+
+    function makeGuess() {
+        const userGuess = parseInt(document.getElementById('user-input').value, 10);
+        document.getElementById('message').textContent = "";
+
+        if (isNaN(userGuess) || userGuess < 1 || userGuess > 15) {
+            document.getElementById('message').textContent = "Not within range. Please try again.";
+            return;
+        }
+
+        attemptCounter--;
+
+        if (userGuess === dealersNum) {
+            document.getElementById('message').textContent = "Your guess was correct!";
+            endGame();
+        } else {
+            document.getElementById('message').textContent = "Your guess was incorrect.";
+            document.getElementById('attempts-left').textContent = "Attempts left: " + attemptCounter;
+
+            if (attemptCounter === 0) {
+                document.getElementById('message').textContent = "Out of attempts. The Dealer's Number was " + dealersNum + ".";
+                endGame();
+            }
+        }
+    }
+
+    function endGame() {
+        document.getElementById('user-input').disabled = true;
+        document.getElementById('play-again').style.display = "block";
+    }
+
+    // Start the game when the page loads
+    window.onload = startGame;
+</script>
+
+</body>
+</html>
