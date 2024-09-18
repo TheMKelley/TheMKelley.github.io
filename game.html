@@ -3,34 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digit Duel Game</title>
+    <title>Scary Digit Duel Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', Courier, monospace;
             text-align: center;
-            background-color: #f0f0f0;
+            background-color: #222;
+            color: #fff;
             padding: 20px;
         }
         #game-container {
-            background-color: #fff;
+            background-color: #333;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
             display: inline-block;
         }
         input[type="number"] {
             padding: 10px;
             margin: 10px 0;
             width: 100px;
+            border: 2px solid #f00;
+            background-color: #444;
+            color: #fff;
         }
         button {
             padding: 10px 20px;
             margin: 10px 0;
             cursor: pointer;
+            background-color: #f00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
         }
-        #message {
+        #message, #hint {
             margin: 20px 0;
             font-weight: bold;
+            color: #f00;
+        }
+        #timer {
+            font-size: 24px;
+            color: #ffcc00;
         }
     </style>
 </head>
@@ -41,53 +54,89 @@
     <p>You have 3 attempts to guess a number between 1 and 15.</p>
     <div id="game-status">
         <p id="attempts-left">Attempts left: 3</p>
+        <p id="timer">Time left: <span id="time-remaining">15</span> seconds</p>
         <input type="number" id="user-input" min="1" max="15" placeholder="Enter a number">
         <button onclick="makeGuess()">Guess</button>
     </div>
     <div id="message"></div>
+    <div id="hint"></div>
     <button id="play-again" style="display: none;" onclick="startGame()">Play Again</button>
 </div>
+
+<audio id="correct-sound" src="correct.mp3" preload="auto"></audio>
+<audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
+<audio id="game-over-sound" src="game-over.mp3" preload="auto"></audio>
 
 <script>
     let dealersNum;
     let attemptCounter;
+    let timer;
+    let timeRemaining = 15;
 
     function startGame() {
         dealersNum = Math.floor(Math.random() * 15) + 1; // Random number between 1 and 15
         attemptCounter = 3;
+        timeRemaining = 15;
         document.getElementById('attempts-left').textContent = "Attempts left: 3";
         document.getElementById('message').textContent = "";
+        document.getElementById('hint').textContent = "";
         document.getElementById('play-again').style.display = "none";
         document.getElementById('user-input').value = "";
         document.getElementById('user-input').disabled = false;
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            timeRemaining--;
+            document.getElementById('time-remaining').textContent = timeRemaining;
+
+            if (timeRemaining <= 0) {
+                document.getElementById('message').textContent = "Time's up! The Dealer's Number was " + dealersNum + ".";
+                document.getElementById('game-over-sound').play();
+                endGame();
+            }
+        }, 1000);
     }
 
     function makeGuess() {
         const userGuess = parseInt(document.getElementById('user-input').value, 10);
         document.getElementById('message').textContent = "";
+        document.getElementById('hint').textContent = "";
 
         if (isNaN(userGuess) || userGuess < 1 || userGuess > 15) {
-            document.getElementById('message').textContent = "Not within range. Please try again.";
+            document.getElementById('message').textContent = "Not within range. Please try again!";
             return;
         }
 
         attemptCounter--;
 
         if (userGuess === dealersNum) {
-            document.getElementById('message').textContent = "Your guess was correct!";
+            document.getElementById('message').textContent = "Your guess was correct! You survived!";
+            document.getElementById('correct-sound').play();
             endGame();
         } else {
             document.getElementById('message').textContent = "Your guess was incorrect.";
             document.getElementById('attempts-left').textContent = "Attempts left: " + attemptCounter;
 
+            // Provide a hint based on the user's guess
+            if (userGuess < dealersNum) {
+                document.getElementById('hint').textContent = "Hint: Try a higher number!";
+            } else {
+                document.getElementById('hint').textContent = "Hint: Try a lower number!";
+            }
+
             if (attemptCounter === 0) {
-                document.getElementById('message').textContent = "Out of attempts. The Dealer's Number was " + dealersNum + ".";
+                document.getElementById('message').textContent = "Out of attempts! The Dealer's Number was " + dealersNum + ".";
+                document.getElementById('game-over-sound').play();
                 endGame();
             }
         }
     }
 
     function endGame() {
+        clearInterval(timer);
         document.getElementById('user-input').disabled = true;
         document.getElementById('play-again').style.display = "block";
     }
@@ -98,3 +147,4 @@
 
 </body>
 </html>
+
